@@ -1,5 +1,6 @@
 const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
 const Comic = require('../../models/Comic.js');
+const displayComic = require('../../utils/displayDomic.js')
 
 
 module.exports = {
@@ -14,11 +15,13 @@ module.exports = {
 
         const name = interaction.options.get('name').value;
         const comicUrl = interaction.options.get('url').value;
-        let previousChapter = interaction.options.get('previous-chapter')?.value || null;
-        let monitored = interaction.options.get('monitored')?.value || null;
-        console.log(`1: comicUrl: ${comicUrl}\npreviousChapter: ${previousChapter}\nmonitored: ${monitored}`);
-        await interaction.deferReply();
+        let previousChapter = interaction.options.get('previous-chapter')?.value;
+        let monitored = interaction.options.get('monitored')?.value;
+        const linksReg = /(http|https):\/\/[^\s]*\.[^\s]+/g;
 
+
+        await interaction.deferReply();
+        // console.log(`previousChapter: ${previousChapter}\nmonitored: ${monitored}`);
 
         const query = {
             comicUrl: comicUrl,
@@ -26,12 +29,13 @@ module.exports = {
 
         const dbComic = await Comic.findOne(query);
 
+
         // Comic with given url exists in the database
         if (dbComic) {
 
             if (dbComic.comicName != name) {
                 await interaction.editReply({
-                    content: `There is already comic with given url: ${dbComic.comicName}.`,
+                    content: `There is already comic with given url:\n${displayComic(dbComic)}`,
                 })
                 return;
 
@@ -39,24 +43,22 @@ module.exports = {
                 let comicValues = [];
                 let message = '';
 
-                console.log(`2: comicUrl: ${comicUrl}\npreviousChapter: ${previousChapter}\nmonitored: ${monitored}`);
 
                 if (comicUrl != dbComic.comicUrl) {
                     dbComic.comicUrl = comicUrl;
                     comicValues.push(" comicUrl");
                 };
-                if (previousChapter != null && previousChapter != dbComic.previousChapter) {
+                if (previousChapter != undefined && previousChapter != dbComic.previousChapter) {
                     dbComic.previousChapter = previousChapter;
                     comicValues.push(" previousChapter");
                 };
-                if (monitored != null && monitored != dbComic.monitored) {
+                if (monitored != undefined && monitored != dbComic.monitored) {
                     dbComic.monitored = monitored;
                     comicValues[comicValues.length] = " monitored";
                 };
-                console.log(comicValues.toString());
-                console.log(comicValues);
+
                 if (comicValues.length > 0) {
-                    message = 'Existing comic values were updated:' + comicValues.toString();
+                    message = `Existing comic values were updated: ${comicValues.toString()}\n${displayComic(dbComic)}`;
                 } else {
                     message = 'No updates to this existing comic.';
                 }
@@ -72,15 +74,31 @@ module.exports = {
                 return;
             };
 
-        // Given comic doesn't exist in the database
+        // Comic with given url doesn't exist in the database
         } else {
 
-            if (previousChapter === undefined) {
-                previousChapter = 1;
+            const query2 = {
+                comicName: name,
             };
-            if (monitored === undefined) {
-                monitored = 1;
-            }
+
+            const dbComic2 = await Comic.findOne(query2);
+            
+            if (dbComic2) {
+                await interaction.editReply({
+                    content: `There is already comic with given name:\n${displayComic(dbComic2)}`,
+                })
+                return;
+            };
+
+            var link = comicUrl.match(linksReg) || 0;
+
+                if (link == 0) {
+                    await interaction.editReply({
+                        content: 'Specify a proper comic link.',
+                    })
+                    return;
+                }
+
 
             // Create new comic
             const newComic = new Comic({
@@ -126,7 +144,7 @@ module.exports = {
         {
             name: 'monitored',
             description: 'Specifies whether comic will be monitored.',
-            type: ApplicationCommandOptionType.Number,
+            type: ApplicationCommandOptionType.Integer,
             choices: [
                 {
                     name: 'monitored',

@@ -1,35 +1,34 @@
 const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits, Constants } = require('discord.js');
 const Comic = require('../../models/Comic.js');
+const displayComic = require('../../utils/displayDomic.js')
 
 
 module.exports = {
 
     /**
      * 
-     * @param {Client} client 
+     * @param {Client} client
      * @param {Interaction} interaction 
      */
 
     callback: async (client, interaction) => {
         await interaction.deferReply();
 
-        const monitored = interaction.options.get('monitored')?.value || null;
-        const comicName = interaction.options.get('comic-name')?.value || null
+        const monitored = interaction.options.get('monitored')?.value;
+        const comicName = interaction.options.get('name')?.value;
         let comics = {};
         let message = '';
-
 
         if (comicName) {
             const query = {
                 comicName: comicName,
             };
-
             comics = await Comic.find(query);
 
-        } else if (!monitored) {
+        } else if (monitored === undefined) {
             comics = await Comic.find({});
         } else {
-            if (monitored == 1) {
+            if (monitored) {
                 const query = {
                     monitored: 1,
                 };
@@ -42,16 +41,12 @@ module.exports = {
             }
         };
 
-        // console.log(`comics: ${comics}`);
-
         if (comics.length == 0) {
             message = 'There are no comics found.';
         } else {
             for (const comic of comics) {
-                message += `name: ${comic.comicName}
-                url: <${comic.comicUrl}>
-                previousChapter: ${comic.previousChapter}
-                monitored: ${comic.monitored}\n`;
+                
+                message += displayComic(comic);
             };
         }
         
@@ -62,17 +57,22 @@ module.exports = {
 
     },
 
-    name: 'listcomics',
-    description: 'Adds comic to be monitored.',
+    name: 'listcomic',
+    description: 'Lists comics esisting in the database.',
     // devOnly: Boolean,
     // testOnly: Boolean,
     // delete: true,
 
     options: [
         {
+            name: 'name',
+            description: 'Lists database content for given comic.',
+            type: ApplicationCommandOptionType.String,
+        },
+        {
             name: 'monitored',
             description: 'Lists monitored/not monitored comics.',
-            type: ApplicationCommandOptionType.Number,
+            type: ApplicationCommandOptionType.Integer,
             choices: [
                 {
                     name: 'monitored',
@@ -84,10 +84,5 @@ module.exports = {
                 }
             ]
         },
-        {
-            name: 'comic-name',
-            description: 'Lists database content for given comic.',
-            type: ApplicationCommandOptionType.String,
-        }
     ],
 };

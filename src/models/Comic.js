@@ -14,11 +14,11 @@ const comicSchema = new Schema({
     },
     previousChapter: {
         type: Number,
-        default: 0,
+        default: 1,
     },
     monitored: {
         type: Number,
-        default: 0,
+        default: 1,
     }
 
 });
