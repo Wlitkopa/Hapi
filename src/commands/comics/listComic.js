@@ -1,6 +1,6 @@
-const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits, Constants } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType } = require('discord.js');
 const Comic = require('../../models/Comic.js');
-const displayComic = require('../../utils/displayDomic.js')
+const displayComic = require('../../utils/displayComic.js');
 
 
 module.exports = {
