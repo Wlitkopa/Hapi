@@ -1,2 +1,2 @@
 # Hapi
-Discord bot which notifies about new comic chapters
+Discord bot which notifies about new comic chapters (not finished yet)
