@@ -7,7 +7,7 @@ module.exports = async (dbComic) => {
 
     var newChapter = null;
     var comicWebPage;
-    const chaptersReg = /<li class="item" data-number=\d+*>/g
+    const chaptersReg = /<li class="item" data-number=\d*>/g;
     
     console.log(displayComic(dbComic));
 

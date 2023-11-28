@@ -27,11 +27,18 @@ module.exports = {
         }
 
         if (monitored === null) {
-            await Comic.deleteOne({ comicName: name });
+            let delNum = await Comic.deleteOne({ comicName: name });
+            console.log(`delNum: ${delNum.deletedCount}`)
+            if (delNum.deletedCount > 0) {
+                await interaction.editReply({
+                    content: `Comic **${name}** was succesfully deleted.`
+                });
+            } else {
+                await interaction.editReply({
+                    content: `There was no comic with given name found.`
+                });
+            }
 
-            await interaction.editReply({
-                content: `Comic **${name}** was succesfully deleted.`
-            });
             return;
 
         } else {
@@ -41,12 +48,10 @@ module.exports = {
             await Comic.deleteMany({ monitored: 0 });
 
             await interaction.editReply({
-                content: `Not monitored comics were succesfully deleted.`
+                content: `Not-monitored comics were succesfully deleted.`
             });
             return;
         }
-
-        
         
     },
 

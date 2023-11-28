@@ -20,6 +20,7 @@ module.exports = {
         const name = interaction.options.get('comic-name')?.value || null;
 
         console.log(`comic-name: ${name}`);
+        
 
         // Checking new chapter for specified comic
         if (name) {
