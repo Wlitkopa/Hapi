@@ -28,11 +28,10 @@ module.exports = {
             const query = { comicName: name, };
             const comics = await Comic.find(query);
 
-            console.log(`dbComic.comicName: ${comics[0].comicName}`);
-
             // Comic exists in database
-            if (comics) {
-                // console.log("From checkChapters:\n" + displayComic(dbComic));
+            if (comics.length != 0) {
+                console.log(`dbComic.comicName: ${comics[0].comicName}`);
+                console.log("From checkChapters:\n" + comics);
 
                 let newChapter = checkNewChapter(comics[0]);
 
