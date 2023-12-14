@@ -1,4 +1,5 @@
 
+const { Double, Decimal128 } = require('mongodb');
 const { Schema, model } = require('mongoose');
 
 
@@ -13,7 +14,7 @@ const comicSchema = new Schema({
         required: true,
     },
     previousChapter: {
-        type: Number,
+        type: Decimal128,
         default: 1,
     },
     monitored: {

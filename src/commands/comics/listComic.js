@@ -29,14 +29,10 @@ module.exports = {
             comics = await Comic.find({});
         } else {
             if (monitored) {
-                const query = {
-                    monitored: 1,
-                };
+                const query = { monitored: 1 };
                 comics = await Comic.find(query);
             } else {
-                const query = {
-                    monitored: 0,
-                };
+                const query = { monitored: 0 };
                 comics = await Comic.find(query);
             }
         };

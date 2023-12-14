@@ -48,7 +48,7 @@ module.exports = {
                 dbComic.comicUrl = newUrl;
                 comicValues.push(" comicUrl");
             };
-            if (previousChapter != undefined && previousChapter != dbComic.previousChapter) {
+            if (previousChapter != undefined && parseFloat(previousChapter) != dbComic.previousChapter) {
                 dbComic.previousChapter = previousChapter;
                 comicValues.push(" previousChapter");
             };
@@ -116,7 +116,7 @@ module.exports = {
         {
             name: 'previous-chapter',
             description: 'New chapter.',
-            type: ApplicationCommandOptionType.Integer,
+            type: ApplicationCommandOptionType.String,
         },
         {
             name: 'monitored',
