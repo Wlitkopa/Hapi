@@ -17,7 +17,9 @@ module.exports = {
         const comicUrl = interaction.options.get('url').value;
         let previousChapter = interaction.options.get('previous-chapter')?.value;
         let monitored = interaction.options.get('monitored')?.value;
-        const linksReg = /(http|https):\/\/[^\s]*\.[^\s]+/g;
+        // const linksReg = /(http|https):\/\/[^\s]*\.[^\s]+/g;
+        const linksReg = /(http|https):\/\/mangafire\.to[^\s]+/g;
+
 
 
         await interaction.deferReply();

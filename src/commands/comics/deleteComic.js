@@ -17,8 +17,6 @@ module.exports = {
         const monitored = interaction.options.get('not-monitored')?.value || null;
         await interaction.deferReply();
 
-        console.log(`monitored: ${monitored}`);
-
         if (name === null && monitored === null) {
             await interaction.editReply({
                 content: `Specify comic/comics to be deleted.`

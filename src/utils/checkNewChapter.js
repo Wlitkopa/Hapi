@@ -20,15 +20,23 @@ module.exports = async (dbComic) => {
       })
     .catch(function (error) {
         console.log(`There was an error using axios: ${error}`);
+        return null;
     });
 
     
 
     // console.log(`AXIOS:\n${comicWebHtml}`);
-    const dom = new jsdom.JSDOM(comicWebHtml);
-    var lastChapter = dom.window.document.querySelector('[data-number]');
-    var lastChapterNum = parseFloat(lastChapter.getAttribute('data-number'));
-    console.log(`lastChapterNum: ${lastChapterNum}`);
+    try {
+        const dom = new jsdom.JSDOM(comicWebHtml);
+        var lastChapter = dom.window.document.querySelector('[data-number]');
+        var lastChapterNum = parseFloat(lastChapter.getAttribute('data-number'));
+        console.log(`lastChapterNum: ${lastChapterNum}`);
+    }
+    catch (error) {
+        console.log(`Comic ${dbComic.comicName} has invalid url:\n${dbComic.comicUrl}`);
+        return null;
+    }
+
 
     if (lastChapterNum > dbComic.previousChapter) {
         console.log(`End of checkNewChapters function.\nPreviousChapter: ${dbComic.previousChapter}\nNew chapter: ${lastChapterNum}`);

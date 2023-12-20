@@ -16,7 +16,7 @@ module.exports = async (comics) => {
         // If new chapter exists
         if (newChapter) {
 
-            replyContent += `There is new chapter for ${comic.comicName}:\n   Previous Chapter: ${comic.previousChapter}\n   New chapter: ${newChapter}!\n`
+            replyContent += `There is new chapter for **${comic.comicName}**:\n    Previous Chapter: ${comic.previousChapter}\n    New chapter: ${newChapter}!\n\n`
 
             comic.previousChapter = newChapter;
             await comic.save().catch((error) => {

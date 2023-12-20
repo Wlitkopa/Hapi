@@ -70,7 +70,7 @@ module.exports = {
 
         // Checking chapter for every comic in database
         } else {
-            let changes = 0;
+
             const query = { monitored: 1 };
             const comics = await Comic.find(query);
 
