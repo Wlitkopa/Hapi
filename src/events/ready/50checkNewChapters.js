@@ -44,15 +44,15 @@ module.exports = async (client) => {
 
             // If there is any new chapter
             if (replyContent != ``) {
-                console.log(`State of chapters for: **${hours}:${minutes}, ${day}.${month}.${year}**`);
+                // console.log(`State of chapters for: **${hours}:${minutes}, ${day}.${month}.${year}**`);
 
-                replyContent = `State of chapters for:  ${hours}:${minutes}, ${day}-${month}-${year}\n\n` + replyContent;
+                replyContent = `*State of chapters for:  ${hours}:${minutes}, ${day}.${month}.${year}*\n\n` + replyContent;
                 console.log(`replyContent: ${replyContent}`);
                 await channel.send({
                     content: replyContent,
                 });
             } else {
-                replyContent = `State of chapters for: ${hours}:${minutes}, ${day}-${month}-${year}\n` + replyContent;
+                replyContent = `*State of chapters for: ${hours}:${minutes}, ${day}.${month}.${year}*\n\n` + replyContent;
 
                 await channel.send({
                     content: 'There aren\'t any new chapters for monitored comics.',

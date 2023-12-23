@@ -21,6 +21,20 @@ module.exports = {
         const name = interaction.options.get('comic-name')?.value || null;
 
         console.log(`comic-name: ${name}`);
+
+        const date = new Date();
+        let day = date.getDay();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        };
+        if (hours < 10) {
+            hours = '0' + hours;
+        };
+        var replyContent = `*State of chapters for:  ${hours}:${minutes}, ${day}.${month}.${year}*\n\n`;
         
 
         // Checking new chapter for specified comic
@@ -34,13 +48,16 @@ module.exports = {
                 // console.log(`dbComic.comicName: ${comics[0].comicName}`);
                 // console.log("From checkChapters:\n" + comics);
 
+                
+
                 let newChapter = await checkNewChapter(comics[0]);
 
                 // If new chapter exists
                 if (newChapter) {
+                    replyContent = replyContent + `There is new chapter for ${name}:\n   Previous Chapter: ${comics[0].previousChapter}\n   New chapter: ${newChapter}!`;
 
                     await interaction.editReply({
-                        content: `There is new chapter for ${name}:\n   Previous Chapter: ${comics[0].previousChapter}\n   New chapter: ${newChapter}!`,
+                        content: replyContent,
                     });
                     comics[0].previousChapter = newChapter;
                     await comics[0].save().catch((error) => {
@@ -50,9 +67,9 @@ module.exports = {
 
                 // If new chapter doesn't exist
                 } else {
-                    
+                    replyContent = replyContent + `There is no new chapter for comic "${name}"`
                     await interaction.editReply({
-                        content: `There is no new chapter for comic "${name}"`,
+                        content: replyContent,
                     });
                     return;
                 }
@@ -74,18 +91,20 @@ module.exports = {
             const query = { monitored: 1 };
             const comics = await Comic.find(query);
 
-
-            let replyContent = await checkAllNewChapters(comics);
+            let functionReply = await checkAllNewChapters(comics);
 
             // If there is any new chapter
-            if (replyContent != ``) {
-                console.log(`replyContent: ${replyContent}`);
+            if (functionReply != ``) {
+                console.log(`functionReply: ${functionReply}`);
+                replyContent = replyContent + functionReply;
                 await interaction.editReply({
                     content: replyContent,
                 });
             } else {
+                console.log(`replyContent: ${replyContent}`);
+                replyContent = replyContent + `There aren\'t any new chapters for monitored comics.`;
                 await interaction.editReply({
-                    content: 'There aren\'t any new chapters for monitored comics.',
+                    content: replyContent,
                 });
             }
             
