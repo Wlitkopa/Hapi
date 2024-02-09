@@ -19,7 +19,7 @@ module.exports = async (client) => {
 
     const channel = await client.channels.cache.get(process.env.HAPI_CHANNEL_ID);
     const query = { monitored: 1 };
-    const intervalTime = 8*60*60*1000;
+    const intervalTime = 28800000; // 8*60*60*1000
 
     try {
 

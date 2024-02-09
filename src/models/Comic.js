@@ -17,6 +17,13 @@ const comicSchema = new Schema({
         type: Decimal128,
         default: 1,
     },
+    lastRead: {
+        type: Decimal128,
+        default: null,
+    },
+    // guildId: {
+    //     type: Decimal128,
+    // },
     monitored: {
         type: Number,
         default: 1,

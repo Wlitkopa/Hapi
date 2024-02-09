@@ -17,6 +17,7 @@ module.exports = {
         const newName = interaction.options.get('new-name')?.value;
         const newUrl = interaction.options.get('url')?.value;
         const previousChapter = interaction.options.get('previous-chapter')?.value;
+        const lastRead = interaction.options.get('last-read')?.value;
         const monitored = interaction.options.get('monitored')?.value;
         const linksReg = /(http|https):\/\/[^\s]*\.[^\s]+/g;
 
@@ -48,15 +49,60 @@ module.exports = {
                 dbComic.comicUrl = newUrl;
                 comicValues.push(" comicUrl");
             };
-            if (previousChapter != undefined && parseFloat(previousChapter) != dbComic.previousChapter) {
-                dbComic.previousChapter = previousChapter;
-                comicValues.push(" previousChapter");
-            };
+            // if (previousChapter != undefined && parseFloat(previousChapter) != dbComic.previousChapter) {
+            //     dbComic.previousChapter = previousChapter;
+            //     comicValues.push(" previousChapter");
+            // };
+
+            if (previousChapter != undefined) {
+                const floatPreviousChapter = parseFloat(previousChapter);
+                if (!isNaN(floatPreviousChapter) && floatPreviousChapter != dbComic.previousChapter) {
+                    dbComic.previousChapter = floatPreviousChapter;
+                    comicValues.push(" previousChapter");
+                } else if (isNaN(floatPreviousChapter)) {
+                    message = 'Error: Chapters numbers must be provided as a float separated with a dot.'
+                    interaction.editReply({
+                        content: message,
+                    });
+                    return;
+                }
+            }
+
+
+            // if (lastRead != undefined && parseFloat(lastRead) != dbComic.lastRead ) {
+            //     dbComic.lastRead = lastRead;
+            //     console.log('Float parsing ok');
+            //     console.log(`${parseFloat(lastRead)}`);
+            //     comicValues.push(" lastRead");
+            // } else if (lastRead != undefined && parseFloat(lastRead) == NaN) {
+            //     console.log(`Float parsing not ok: ${lastRead}`);
+            //     message = 'Error: Chapters numbers must be provided as a float separated with a dot.'
+            //     interaction.editReply({
+            //         content: message,
+            //     });
+            //     return;
+            // }
+
+            if (lastRead != undefined) {
+                const floatLastRead = parseFloat(lastRead);
+                if (!isNaN(floatLastRead) && floatLastRead != dbComic.lastRead) {
+                    dbComic.lastRead = floatLastRead;
+                    comicValues.push(" lastRead");
+                } else if (isNaN(floatLastRead)) {
+                    message = 'Error: Chapters numbers must be provided as a float separated with a dot.'
+                    interaction.editReply({
+                        content: message,
+                    });
+                    return;
+                }
+            }
+
+
             if (monitored != undefined && monitored != dbComic.monitored) {
                 dbComic.monitored = monitored;
                 comicValues[comicValues.length] = " monitored";
             };
-            if (newName != undefined && monitored != dbComic.comicName) {
+            if (newName != undefined && newName != dbComic.comicName) {
                 dbComic.comicName = newName;
                 comicValues[comicValues.length] = " comicName";
             };
@@ -69,6 +115,10 @@ module.exports = {
 
             await dbComic.save().catch((error) => {
                 console.log(`Error saving updated comic: ${error}`);
+                message = 'Error saving updated comic.'
+                interaction.editReply({
+                    content: message,
+                })
                 return;
             })
 
@@ -116,6 +166,11 @@ module.exports = {
         {
             name: 'previous-chapter',
             description: 'New chapter.',
+            type: ApplicationCommandOptionType.String,
+        },
+        {
+            name: 'last-read',
+            description: 'New last-read chapter.',
             type: ApplicationCommandOptionType.String,
         },
         {

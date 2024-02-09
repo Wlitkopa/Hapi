@@ -17,7 +17,7 @@ module.exports = {
         const comicUrl = interaction.options.get('url').value;
         let previousChapter = interaction.options.get('previous-chapter')?.value;
         let monitored = interaction.options.get('monitored')?.value;
-        // const linksReg = /(http|https):\/\/[^\s]*\.[^\s]+/g;
+        let lastRead =  interaction.options.get('last-read')?.value;
         const linksReg = /(http|https):\/\/mangafire\.to[^\s]+/g;
 
 
@@ -54,9 +54,15 @@ module.exports = {
                     dbComic.previousChapter = previousChapter;
                     comicValues.push(" previousChapter");
                 };
+                if (lastRead != undefined && lastRead != dbComic.lastRead) {
+                    dbComic.lastRead = lastRead;
+                    comicValues.push(" lastRead");
+                }
+
                 if (monitored != undefined && monitored != dbComic.monitored) {
                     dbComic.monitored = monitored;
-                    comicValues[comicValues.length] = " monitored";
+                    comicValues.push(" monitored");
+                    // comicValues[comicValues.length] = " monitored";
                 };
 
                 if (comicValues.length > 0) {
@@ -107,6 +113,7 @@ module.exports = {
                 comicName: name,
                 comicUrl: comicUrl,
                 previousChapter: previousChapter,
+                lastRead: lastRead,
                 monitored: monitored,        
             });
 
@@ -140,8 +147,13 @@ module.exports = {
         },
         {
             name: 'previous-chapter',
-            description: 'The chapter which after comic will be monitored.',
-            type: ApplicationCommandOptionType.Integer,
+            description: 'The chapter pointing the last-known chapter.',
+            type: ApplicationCommandOptionType.String,
+        },
+        {
+            name: 'last-read',
+            description: 'Chapter indicating last-read chapter.',
+            type: ApplicationCommandOptionType.String,
         },
         {
             name: 'monitored',
