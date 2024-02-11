@@ -34,7 +34,7 @@ module.exports = {
         if (hours < 10) {
             hours = '0' + hours;
         };
-        var replyContent = `*State of chapters for:  ${hours}:${minutes}, ${day}.${month}.${year}*\n\n`;
+        var replyContent = `*State of chapters for:  ${hours}:${minutes},    ${day}.${month}.${year}*\n\n`;
         
 
         // Checking new chapter for specified comic

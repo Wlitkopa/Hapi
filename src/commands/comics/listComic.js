@@ -41,7 +41,6 @@ module.exports = {
             message = 'There are no comics found.';
         } else {
             for (const comic of comics) {
-                
                 message += displayComic(comic);
             };
         }

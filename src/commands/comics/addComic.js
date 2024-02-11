@@ -119,7 +119,7 @@ module.exports = {
 
             await newComic.save();
             await interaction.editReply({
-                content: `Comic ${name} was added!`,
+                content: `Comic **${name}** was added!`,
             })
             return;
         }
