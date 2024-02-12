@@ -67,7 +67,11 @@ module.exports = {
 
                 // If new chapter doesn't exist
                 } else {
-                    replyContent = replyContent + `There is no new chapter for comic "${name}"`
+                    if (newChapter == 0) {
+                        replyContent = replyContent + `There was an error :(`
+                    } else {
+                        replyContent = replyContent + `There is no new chapter for comic "${name}"`
+                    }
                     await interaction.editReply({
                         content: replyContent,
                     });
