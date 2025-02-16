@@ -1,7 +1,7 @@
 const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
 const Comic = require('../../models/Comic.js');
 const displayComic = require('../../utils/displayComic.js')
-
+const logger = require('../../utils/logger.js');
 
 module.exports = {
 
@@ -25,7 +25,7 @@ module.exports = {
         await interaction.deferReply();
         // console.log(`previousChapter: ${previousChapter}\nmonitored: ${monitored}`);
 
-        const query = {
+        const query = { 
             comicUrl: comicUrl,
         };
 
@@ -72,7 +72,8 @@ module.exports = {
                 }
 
                 await dbComic.save().catch((error) => {
-                    console.log(`Error saving updated comic: ${error}`);
+                    // console.log(`Error saving updated comic: ${error}`);
+                    logger.error(`Error saving updated comic: ${error}`);
                     return;
                 })
     

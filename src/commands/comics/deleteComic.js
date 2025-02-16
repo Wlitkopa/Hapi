@@ -1,6 +1,7 @@
 const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
 const Comic = require('../../models/Comic.js');
 const displayComic = require('../../utils/displayComic.js')
+const logger = require('../../utils/logger.js');
 
 
 module.exports = {
@@ -26,7 +27,7 @@ module.exports = {
 
         if (monitored === null) {
             let delNum = await Comic.deleteOne({ comicName: name });
-            console.log(`delNum: ${delNum.deletedCount}`)
+            // console.log(`delNum: ${delNum.deletedCount}`)
             if (delNum.deletedCount > 0) {
                 await interaction.editReply({
                     content: `Comic **${name}** was succesfully deleted.`

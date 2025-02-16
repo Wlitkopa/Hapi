@@ -1,4 +1,6 @@
 
+const logger = require('./logger');
+
 module.exports = (message) => {
 
     try {
@@ -22,6 +24,8 @@ module.exports = (message) => {
     return msgXp;
 
 } catch (error) {
-        console.log(`The was an error in getMessageXpPoints: ${error}`);
+        // console.log(`The was an error in getMessageXpPoints: ${error}`);
+        logger.error(`The was an error in getMessageXpPoints: ${error}`);
+        
     }
 };

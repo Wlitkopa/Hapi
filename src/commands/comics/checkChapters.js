@@ -4,6 +4,7 @@ const checkNewChapter = require("../../utils/checkNewChapter.js");
 const checkAllNewChapters = require("../../utils/checkAllNewChapters.js");
 const displayComic = require('../../utils/displayComic.js');
 const Comic = require('../../models/Comic.js');
+const logger = require('../../utils/logger.js');
 
 
 module.exports = {
@@ -20,10 +21,10 @@ module.exports = {
 
         const name = interaction.options.get('comic-name')?.value || null;
 
-        console.log(`comic-name: ${name}`);
+        // console.log(`comic-name: ${name}`);
 
         const date = new Date();
-        let day = date.getDay();
+        let day = date.getDate();
         let month = date.getMonth() + 1;
         let year = date.getFullYear();
         let hours = date.getHours();
@@ -34,7 +35,13 @@ module.exports = {
         if (hours < 10) {
             hours = '0' + hours;
         };
-        var replyContent = `*State of chapters for:  ${hours}:${minutes},    ${day}.${month}.${year}*\n\n`;
+        if (day < 10) {
+            day = '0' + day;
+        };
+        if (month < 10) {
+            month = '0' + month;
+        };
+        var replyContent = `*State of chapters for:  ${hours}:${minutes},  ${day}.${month}.${year}*\n\n`;
         
 
         // Checking new chapter for specified comic
@@ -54,14 +61,15 @@ module.exports = {
 
                 // If new chapter exists
                 if (newChapter) {
-                    replyContent = replyContent + `There is new chapter for ${name}:\n   Previous Chapter: ${comics[0].previousChapter}\n   New chapter: ${newChapter}!`;
+                    replyContent = replyContent + `There is new chapter for **${name}**:\n   Previous Chapter: ${comics[0].previousChapter}\n   New chapter: ${newChapter}!`;
 
                     await interaction.editReply({
                         content: replyContent,
                     });
                     comics[0].previousChapter = newChapter;
                     await comics[0].save().catch((error) => {
-                        console.log(`Error saving updated comic: ${error}`);
+                        // console.log(`Error saving updated comic: ${error}`);
+                        logger.error(`Error saving updated comic: ${error}`);
                     });
                     return;
 
@@ -99,13 +107,13 @@ module.exports = {
 
             // If there is any new chapter
             if (functionReply != ``) {
-                console.log(`functionReply: ${functionReply}`);
+                // console.log(`functionReply: ${functionReply}`);
                 replyContent = replyContent + functionReply;
                 await interaction.editReply({
                     content: replyContent,
                 });
             } else {
-                console.log(`replyContent: ${replyContent}`);
+                // console.log(`replyContent: ${replyContent}`);
                 replyContent = replyContent + `There aren\'t any new chapters for monitored comics.`;
                 await interaction.editReply({
                     content: replyContent,

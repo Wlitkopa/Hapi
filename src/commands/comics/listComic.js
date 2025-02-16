@@ -1,6 +1,7 @@
 const { Client, Interaction, ApplicationCommandOptionType } = require('discord.js');
 const Comic = require('../../models/Comic.js');
 const displayComic = require('../../utils/displayComic.js');
+const logger = require('../../utils/logger.js');
 
 
 module.exports = {

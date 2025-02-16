@@ -1,7 +1,7 @@
 
 const { devs, testServer } = require('../../../config.json');
 const getLocalCommands = require('../../utils/getLocalCommands');
-
+const logger = require('../../utils/logger');
 
 
 module.exports = async (client, interaction) => {
@@ -69,9 +69,7 @@ module.exports = async (client, interaction) => {
         await commandObject.callback(client, interaction);
 
     } catch (error) {
-        console.log(`There was an error running this command: ${error}`);
+        logger.error(`There was an error running this command: ${error}`);
     }
-
-
 
 };

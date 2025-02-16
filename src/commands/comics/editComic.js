@@ -1,6 +1,7 @@
 const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
 const Comic = require('../../models/Comic.js');
 const displayComic = require('../../utils/displayComic.js')
+const logger = require('../../utils/logger.js');
 
 
 module.exports = {
@@ -49,10 +50,6 @@ module.exports = {
                 dbComic.comicUrl = newUrl;
                 comicValues.push(" comicUrl");
             };
-            // if (previousChapter != undefined && parseFloat(previousChapter) != dbComic.previousChapter) {
-            //     dbComic.previousChapter = previousChapter;
-            //     comicValues.push(" previousChapter");
-            // };
 
             if (previousChapter != undefined) {
                 const floatPreviousChapter = parseFloat(previousChapter);
@@ -67,21 +64,6 @@ module.exports = {
                     return;
                 }
             }
-
-
-            // if (lastRead != undefined && parseFloat(lastRead) != dbComic.lastRead ) {
-            //     dbComic.lastRead = lastRead;
-            //     console.log('Float parsing ok');
-            //     console.log(`${parseFloat(lastRead)}`);
-            //     comicValues.push(" lastRead");
-            // } else if (lastRead != undefined && parseFloat(lastRead) == NaN) {
-            //     console.log(`Float parsing not ok: ${lastRead}`);
-            //     message = 'Error: Chapters numbers must be provided as a float separated with a dot.'
-            //     interaction.editReply({
-            //         content: message,
-            //     });
-            //     return;
-            // }
 
             if (lastRead != undefined) {
                 const floatLastRead = parseFloat(lastRead);
@@ -114,7 +96,8 @@ module.exports = {
             }
 
             await dbComic.save().catch((error) => {
-                console.log(`Error saving updated comic: ${error}`);
+                // console.log(`Error saving updated comic: ${error}`);
+                logger.error(`Error saving updated comic: ${error}`);
                 message = 'Error saving updated comic.'
                 interaction.editReply({
                     content: message,

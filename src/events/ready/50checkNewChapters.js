@@ -4,7 +4,7 @@ require('dotenv').config();
 const checkAllNewChapters = require("../../utils/checkAllNewChapters.js");
 const displayComic = require('../../utils/displayComic.js');
 const Comic = require('../../models/Comic.js');
-
+const logger = require('../../utils/logger');
 
 
 const client = new Client({
@@ -47,7 +47,7 @@ module.exports = async (client) => {
                 // console.log(`State of chapters for: **${hours}:${minutes}, ${day}.${month}.${year}**`);
 
                 replyContent = `*State of chapters for:  ${hours}:${minutes}, ${day}.${month}.${year}*\n\n` + replyContent;
-                console.log(`replyContent: ${replyContent}`);
+                // console.log(`replyContent: ${replyContent}`);
                 await channel.send({
                     content: replyContent,
                 });
@@ -68,7 +68,8 @@ module.exports = async (client) => {
 
         }, intervalTime);
     } catch (error) {
-        console.log(error)
+        // console.log(error);
+        logger.error(`There was an error in 50checkNewChapters event: ${error}.`);
     }
 
 }

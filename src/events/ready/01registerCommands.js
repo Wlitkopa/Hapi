@@ -4,6 +4,7 @@ const areCommandsDifferent = require('../../utils/areCommandsDifferent');
 const getAllFiles = require('../../utils/getAllFiles');
 const getApplicationCommands = require('../../utils/getApplicationCommands');
 const getLocalCommands = require('../../utils/getLocalCommands');
+const logger = require('../../utils/logger');
 
 module.exports = async (client) => {
 
@@ -21,7 +22,8 @@ module.exports = async (client) => {
             if (existingCommand) {
                 if (localCommand.delete) {
                     await applicationCommands.delete(existingCommand.id);
-                    console.log(`  Deleted command "${name}".`);
+                    // console.log(`  Deleted command "${name}".`);
+                    logger.info(`Deleted command "${name}".`);
                     continue;
                 }
 
@@ -31,12 +33,14 @@ module.exports = async (client) => {
                         options,
                     });
 
-                    console.log(`  Edited command "${name}"`)
+                    // console.log(`  Edited command "${name}"`)
+                    logger.info(`Edited command "${name}".`);
                 }
                 
             } else {
                 if (localCommand.delete) {
-                    console.log(`  Skipping registering command "${name}" as it's set to delete.`);
+                    // console.log(`  Skipping registering command "${name}" as it's set to delete.`);
+                    logger.info(`Skipping registering command "${name}" as it's set to delete.`);
                     continue;
                 }
 
@@ -46,7 +50,8 @@ module.exports = async (client) => {
                     options
                 });
 
-                console.log(`  Registered command "${name}".`)
+                // console.log(`  Registered command "${name}".`)
+                logger.info(`Registered command "${name}".`);
 
             };
 
@@ -54,7 +59,8 @@ module.exports = async (client) => {
 
     
     } catch (error) {
-        console.log(`There was an error: ${error}`)
+        // console.log(`There was an error: ${error}`)
+        logger.info(`There was an error: ${error}`);
     }
 
 

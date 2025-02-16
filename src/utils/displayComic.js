@@ -1,11 +1,11 @@
 
 module.exports = (comic) => {
 
-    let message = `name: ${comic.comicName}
+    let message = `**Name:** ${comic.comicName}
     url: <${comic.comicUrl}>
     lastRead: ${comic.lastRead}
     previousChapter: ${comic.previousChapter}
-    monitored: ${comic.monitored}\n`;
+    monitored: ${comic.monitored}\n\n`;
     
     return message;
 

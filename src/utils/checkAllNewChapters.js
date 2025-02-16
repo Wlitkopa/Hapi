@@ -2,7 +2,7 @@ const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits }
 const checkNewChapter = require("./checkNewChapter.js");
 const displayComic = require('./displayComic.js');
 const Comic = require('../models/Comic.js');
-
+const logger = require('./logger.js');
 
 
 module.exports = async (comics) => {
@@ -20,7 +20,8 @@ module.exports = async (comics) => {
 
             comic.previousChapter = newChapter;
             await comic.save().catch((error) => {
-                console.log(`Error saving updated comic: ${error}`);
+                // console.log(`Error saving updated comic: ${error}`);
+                logger.error(`Error saving updated comic: ${error}`);
             });
         }
     }

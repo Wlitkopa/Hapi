@@ -1,6 +1,7 @@
 const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits } = require('discord.js');
 const Comic = require('../../models/Comic.js');
 const displayComic = require('../../utils/displayComic.js')
+const logger = require('../../utils/logger.js');
 
 
 module.exports = {
@@ -30,7 +31,7 @@ module.exports = {
                 } else {
                     dbComic.lastRead = dbComic.previousChapter;
                     await dbComic.save().catch((error) => {
-                        console.log(`Error saving updated comic: ${error}`);
+                        logger.error(`Error saving updated comic: ${error}`);
                         message = 'Error saving updated comic.'
                         interaction.editReply({
                             content: message,
@@ -59,7 +60,6 @@ module.exports = {
             const query = { monitored: 1 };
             const comics = await Comic.find(query);
             var counter = 0;
-            // console.log(`comics: ${comics}`);
             
             if (comics === undefined) {
                 await interaction.reply({
@@ -70,18 +70,15 @@ module.exports = {
 
             for (const comic of comics) {
                 if (parseFloat(comic.previousChapter) != parseFloat(comic.lastRead)) {
-                    console.log(`comic.previousChapter: ${comic.previousChapter}\ncomic.lastRead: ${comic.lastRead}`)
                     counter += 1;
                     comic.lastRead = comic.previousChapter
                     await comic.save().catch((error) => {
-                        console.log(`Error saving updated comic: ${error}`);
+                        logger.error(`Error saving updated comic: ${error}`);
                         message += `Error saving updated comic ${comic.comicName}\n`
                     })
                     message += `Comic: **${comic.comicName}**\n    -> Last read chapter: **${comic.lastRead}**\n\n`;
                 }
             }
-
-            console.log(`counter: ${counter}`)
 
             if (counter == 0) {
                 message = '*You have read the all newest chapters :)*';
